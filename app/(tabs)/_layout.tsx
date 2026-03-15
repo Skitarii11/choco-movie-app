@@ -1,68 +1,75 @@
-import React from 'react';
-import { SymbolView } from 'expo-symbols';
-import { Link, Tabs } from 'expo-router';
-import { Platform, Pressable } from 'react-native';
+import { Tabs } from "expo-router";
+import { Image, Text, View } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { icons } from "@/constants/icons";
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function TabIcon({ focused, icon, title }: any) {
+  return (
+    <View className="items-center justify-center gap-1">
+      <Image
+        source={icon}
+        resizeMode="contain"
+        tintColor={focused ? "#FF6B6B" : "#8D8D8D"}
+        className="w-6 h-6"
+      />
+      <Text
+        className={`${focused ? "font-semibold text-accent" : "font-normal text-lightText"} text-xs`}
+      >
+        {title}
+      </Text>
+    </View>
+  );
+}
 
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: "#FFF5F5", // New primary background color
+          borderTopWidth: 1,
+          borderTopColor: "#FFE0E0", // New secondary color for the border
+          height: 84, // A bit taller to accommodate text
+        },
+      }}
+    >
+      {/* 1. Home Screen (Нүүр) */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable style={{ marginRight: 15 }}>
-                {({ pressed }) => (
-                  <SymbolView
-                    name={{ ios: 'info.circle', android: 'info', web: 'info' }}
-                    size={25}
-                    tintColor={Colors[colorScheme].text}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Нүүр",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={icons.home} title="Нүүр" />
           ),
         }}
       />
+
+      {/* 2. Categories Screen (Ангилал) */}
       <Tabs.Screen
-        name="two"
+        name="categories" // You will need to create this new file
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
+          title: "Ангилал",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              icon={icons.categories}
+              title="Ангилал"
+            /> // Add a new 'categories' icon
+          ),
+        }}
+      />
+
+      {/* 3. Profile Screen (Профайл) */}
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Профайл",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={icons.person} title="Профайл" />
           ),
         }}
       />
